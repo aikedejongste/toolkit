@@ -27,13 +27,19 @@ ARG PACKAGES="7zip \
 
 RUN apt-get update && apt-get install -y $PACKAGES && rm -rf /var/lib/apt/lists/*
 
+# DRA
+RUN wget https://github.com/devmatteini/dra/releases/download/0.8.2/dra_0.8.2-1_amd64.deb && dpkg -i dra_0.8.2-1_amd64.deb && rm dra_0.8.2-1_amd64.deb
+
 # SOPS
 RUN wget $(curl -s https://api.github.com/repos/getsops/sops/releases/latest | jq -r '.assets[]' | grep amd64.deb | grep download | awk -F '"' '{print $4}') -O /tmp/sops.deb && dpkg -i /tmp/sops.deb
 
 # Helmfile
-#RUN cd /tmp && curl -LO "https://github.com/helmfile/helmfile/releases/latest/download/helmfile_linux_amd64.tar.gz" && tar -xzf helmfile_linux_amd64.tar.gz && mv helmfile /usr/local/bin/helmfile && chmod +x /usr/local/bin/helmfile
+ENV DRA_DISABLE_GITHUB_AUTHENTICATION=true 
+RUN dra download --install --select "helmfile_{tag}_linux_amd64.tar.gz" --output /usr/local/bin helmfile/helmfile
 
 # install latest version of k9s
+RUN dra download --install --select "k9s_linux_amd64.deb" --output /usr/local/bin derailed/k9s
+
 # install latest version of kubectl
 # install latest version of helmfile
 
