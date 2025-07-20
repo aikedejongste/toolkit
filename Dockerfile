@@ -41,6 +41,5 @@ RUN dra download --install --select "helmfile_{tag}_linux_amd64.tar.gz" --output
 RUN dra download --install --select "k9s_linux_amd64.deb" --output /usr/local/bin derailed/k9s
 
 # install latest version of kubectl
-# install latest version of helmfile
-
+RUN curl -sL "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl" -o /usr/local/bin/kubectl && chmod +x /usr/local/bin/kubectl
 
