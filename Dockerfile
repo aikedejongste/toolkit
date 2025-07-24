@@ -43,3 +43,5 @@ RUN dra download --install --select "k9s_linux_amd64.deb" --output /usr/local/bi
 # install latest version of kubectl
 RUN curl -sL "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl" -o /usr/local/bin/kubectl && chmod +x /usr/local/bin/kubectl
 
+# install glab
+RUN curl -s "https://gitlab.com/api/v4/projects/gitlab-org%2Fcli/releases" | jq -r '.[0].assets.links[] | select(.name | endswith("_linux_amd64.deb")).direct_asset_url' | wget -i - && dpkg -i glab*.deb && rm glab*.deb
