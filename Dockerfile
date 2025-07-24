@@ -13,16 +13,19 @@ ARG PACKAGES="7zip \
               apache2-utils \
               curl \
               git \
-	      helm \
+    	      helm \
               htop \
               ipcalc \
-	      jq \
+	          jq \
+              nodejs \
+              npm \
+              openssh-client \
               rsync \
               rclone \
               sqlfluff \
-	      terraform \
+	          terraform \
               vim \
-	      wget \
+	          wget \
               whois"
 
 RUN apt-get update && apt-get install -y $PACKAGES && rm -rf /var/lib/apt/lists/*
@@ -45,3 +48,6 @@ RUN curl -sL "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/s
 
 # install glab
 RUN curl -s "https://gitlab.com/api/v4/projects/gitlab-org%2Fcli/releases" | jq -r '.[0].assets.links[] | select(.name | endswith("_linux_amd64.deb")).direct_asset_url' | wget -i - && dpkg -i glab*.deb && rm glab*.deb
+
+# install markdownlint
+RUN npm install -g markdownlint
