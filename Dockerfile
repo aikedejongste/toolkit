@@ -20,6 +20,8 @@ ARG PACKAGES="7zip \
               nodejs \
               npm \
               openssh-client \
+              python3-pip \
+              pipx \
               rsync \
               rclone \
               sqlfluff \
@@ -51,3 +53,7 @@ RUN curl -s "https://gitlab.com/api/v4/projects/gitlab-org%2Fcli/releases" | jq 
 
 # install markdownlint
 RUN npm install -g markdownlint
+
+# Install Ansible
+RUN pipx ensurepath && pipx install ansible openstacksdk 
+#kubernetes boto3 pywinrm netaddr paramiko requests docker jmespath passlib dnspython
