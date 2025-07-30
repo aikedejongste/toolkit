@@ -55,5 +55,5 @@ RUN curl -s "https://gitlab.com/api/v4/projects/gitlab-org%2Fcli/releases" | jq 
 RUN npm install -g markdownlint
 
 # Install Ansible
-RUN pipx ensurepath && pipx install ansible openstacksdk 
-#kubernetes boto3 pywinrm netaddr paramiko requests docker jmespath passlib dnspython
+RUN pipx ensurepath && pipx install --include-deps ansible
+RUN pipx inject ansible argcomplete openstacksdk kubernetes boto3 pywinrm netaddr paramiko requests docker jmespath passlib dnspython
