@@ -3,9 +3,9 @@ FROM ubuntu:24.04
 RUN apt update && apt install ca-certificates apt-transport-https gpg gnupg software-properties-common lsb-release curl --yes
 
 RUN curl -fsSL https://apt.releases.hashicorp.com/gpg | gpg --dearmor -o /usr/share/keyrings/hashicorp.gpg
-RUN curl -fsSL https://baltocdn.com/helm/signing.asc | gpg --dearmor -o /usr/share/keyrings/helm.gpg
+RUN curl -fsSL https://packages.buildkite.com/helm-linux/helm-debian/gpgkey | gpg --dearmor | tee /usr/share/keyrings/helm.gpg > /dev/null
 
-RUN echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/helm.gpg] https://baltocdn.com/helm/stable/debian/ all main" | tee /etc/apt/sources.list.d/helm.list
+RUN echo "deb [signed-by=/usr/share/keyrings/helm.gpg] https://packages.buildkite.com/helm-linux/helm-debian/any/ any main" | tee /etc/apt/sources.list.d/helm-stable-debian.list
 RUN echo "deb [signed-by=/usr/share/keyrings/hashicorp.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | tee /etc/apt/sources.list.d/hashicorp.list
 
 ARG PACKAGES="7zip \
@@ -39,7 +39,7 @@ RUN wget https://github.com/devmatteini/dra/releases/download/0.8.2/dra_0.8.2-1_
 RUN wget $(curl -s https://api.github.com/repos/getsops/sops/releases/latest | jq -r '.assets[]' | grep amd64.deb | grep download | awk -F '"' '{print $4}') -O /tmp/sops.deb && dpkg -i /tmp/sops.deb
 
 # Helmfile
-ENV DRA_DISABLE_GITHUB_AUTHENTICATION=true 
+ENV DRA_DISABLE_GITHUB_AUTHENTICATION=true
 RUN dra download --install --select "helmfile_{tag}_linux_amd64.tar.gz" --output /usr/local/bin helmfile/helmfile
 
 # install latest version of k9s
